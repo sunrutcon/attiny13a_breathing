@@ -1,23 +1,39 @@
 
 /* Attiny 13a Breathing */
 
-int led = 0;
+/** pwm pin, digital pin 0
+ *  this is hardware IC pin 5
+ */
+const static int led = 0;
 
-// the setup routine runs once when you press reset:
+/** number of steps for  increasing breath speed */
+const static int p = 5;
+
+/** initial breath constant */
+  const static int r = 5;
+  
+/** the setup routine runs once when you press reset: */
 void setup() {                
-  // initialize the digital pin as an output.
   pinMode(led, OUTPUT);     
 }
 
-// the loop routine runs over and over again forever:
 void loop() {
-  
+  for(int j=1; j<p; j++) {
+    breath(r, j);
+  }
+  for(int j=p; j>1; j--) {
+    breath(r, j);
+  }
+}
+
+void breath(int r, int p) {
   for(int i=0; i<255; i++) {
     analogWrite(led, i);
-    delay(i<10 ? 50 : 20);
+    delay((255-i)/(r*p) + 1);
   }
+  delay(5);
   for(int i=255; i>0; i--) {
     analogWrite(led, i);
-    delay(i<10 ? 50 : 20);
+    delay((255-i)/(r*p) + 1);
   }
 }
